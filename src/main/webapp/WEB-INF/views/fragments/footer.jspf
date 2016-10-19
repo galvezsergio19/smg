@@ -1,0 +1,154 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<div class="modal bs-example-modal-lg fade" id="profile_modal" tabindex="-1" role="dialog" aria-labelledby="profile_modal">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="exampleModalLabel">
+					<spring:message code="view.button.profile"/>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<c:set value="${employee.profile_picture}" var="profile_path"></c:set>
+				<form method="POST" class="form-horizontal" enctype="multipart/form-data" 
+						id="profileForm" action="uploadProfile">
+					<div class="row">
+						<div class="col-md-4">
+						<div id="kv-avatar-errors-2" class="center-block" style="width:800px;display:none"></div>
+						    <div class="kv-avatar center-block text-center" style="width:200px">
+						        <input id="avatar-2" name="avatar-2" type="file" class="file-loading">
+						    </div>
+						</div>
+						
+						<div class="col-md-7">
+							<div class="form-group">
+								<label for="full_name" class="col-sm-3 control-label">
+									<spring:message code="view.label.full_name"/>
+								</label>
+		            			<div class="col-sm-9">
+		            				<input type="text" class="form-control" id="full_name"/>
+		            			</div>
+		          			</div>
+		          			<div class="form-group">
+		          				<label for="username" class="col-sm-3 control-label">
+		          					<spring:message code="view.label.username"/>
+								</label>
+		          				<div class="col-sm-9">
+			            			<input type="text" class="form-control" id="username" readonly/>
+			            		</div>
+		          			</div>
+		          			<div class="form-group">
+		          				<label for="password" class="col-sm-3 control-label">
+		          					<spring:message code="view.label.password"/>
+								</label>
+		            			<div class="col-sm-9">
+		            				<input type="password" class="col-sm-10 form-control" id="password"/>
+		            			</div>
+		          			</div>
+						</div>
+					</div>
+        		</form>
+      		</div>
+      		<div class="modal-footer">
+      			<button type="submit" class="btn btn-primary">
+        			<spring:message code="view.button.update"/>
+        		</button>
+        		<button type="button" class="btn btn-default" data-dismiss="modal">
+					<spring:message code="view.button.close"/>
+				</button>
+      		</div>
+    	</div>
+  	</div>
+</div>
+
+
+<script type="text/javascript">
+
+	$('#btn_logout').on('click', function(){
+		bootbox.confirm({ 
+		    size: 'medium',
+		    title: "Logout?",
+		    message: "Are you sure you want to Logout?", 
+		    closeButton: false,
+		    callback: function(result){ 
+		    	if (result){
+		    		setTimeout(function(){
+						$(".se-pre-con").show();
+						$.ajax({
+					    	type: "GET",
+					        url : 'logout',
+					        success : function(data) {}
+						});
+						location.reload();
+					},1000)
+				}	
+		    }
+		});
+	});
+
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip(); 
+	});
+
+	$(function () {
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-blue',
+			radioClass: 'iradio_square-blue',
+			increaseArea: '20%' // optional
+		});
+	});
+	
+	var btnCust = '<button type="button" class="btn btn-default" title="Upload selected Image" ' + 
+    'onclick="uploadImage()"><i class="glyphicon glyphicon-upload"></i>' +
+    ' Upload</button>';
+    var profile_path = '.' + '${profile_path}';
+    
+	$("#avatar-2").fileinput({
+	    overwriteInitial: true,
+	    maxFileSize: 1500,
+	    showClose: false,
+	    showCaption: false,
+	    showBrowse: false,
+	    browseOnZoneClick: true,
+	    removeLabel: 'Remove',
+	    removeTitle: 'Cancel or reset changes',
+	    elErrorContainer: '#kv-avatar-errors-2',
+	    msgErrorClass: 'alert alert-block alert-danger',
+	    defaultPreviewContent: '<img src="' + profile_path + '" alt="Your Avatar" style="width:100%">' +
+	    						'<h6 class="text-muted">Click to select</h6>',
+	    layoutTemplates: {main2: '{preview} ' +  btnCust + ' {remove} {browse}'},
+	    allowedFileExtensions: ["jpg", "png", "gif"]
+	});
+	
+// 	$('#profileForm').on('submit', function(){
+// 		alert('weyo');
+// 		e.preventDefault();
+//         var formData = new FormData(this);
+// 		$.ajax({
+// 			type: "POST",
+//             url : $(this).attr('action'),
+//             data:formData,
+//             cache:false,
+//             contentType: false,
+//             processData: false,
+//             success : function(data) {
+//             	console.log("success");
+//                 console.log(data);
+//             },
+//             error: function(data){
+//                 console.log("error");
+//                 console.log(data);
+//             }
+//    		});
+// 	});
+	
+
+</script>
+
+
+</body>
+</html>
